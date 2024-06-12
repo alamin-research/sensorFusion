@@ -1,0 +1,132 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{letterhead-UD}[2022/08/01 UDayton Letterhead]
+
+\RequirePackage{xcolor}
+\RequirePackage{fancyhdr}
+\RequirePackage{xparse}
+\RequirePackage{marvosym}
+\RequirePackage[%
+letterpaper,%
+left=1in,%
+right=1in,%
+top=3.3cm,% 
+bottom=2.2cm,%
+headheight=3.3cm,%
+headsep=12pt,%
+footskip=12pt,%
+%showframe,%
+]{geometry}
+\advance \footskip by \ht\strutbox
+\RequirePackage{afterpage}
+\RequirePackage{graphicx}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% https://github.com/latex3/latex2e/issues/786
+% avoid everypage package deprecation warnings by providing the definitions 
+\newcommand*{\AddEverypageHook}[1]{%
+  \AddToHook{shipout/background}{\put(1in,-1in){#1}}}
+\newcommand*{\AddThispageHook}[1]{%
+  \AddToHookNext{shipout/background}{\put(1in,-1in){#1}}}
+
+\makeatletter 
+\disable@package@load{everypage}{}
+\makeatother
+\RequirePackage{background}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{RedScare}{HTML}{D70036}
+\definecolor{FlyersBlue}{HTML}{002F87}
+\definecolor{GlowRed}{HTML}{F80228}
+\definecolor{GlowBlue}{HTML}{0200D1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+\newcommand*{\bigcdot}{}% Check if undefined
+\DeclareRobustCommand*{\bigcdot}{%
+  \mathbin{\mathpalette\bigcdot@{}}%
+}
+\newcommand*{\bigcdot@scalefactor}{.75}
+\newcommand*{\bigcdot@widthfactor}{1.15}
+\newcommand*{\bigcdot@}[2]{%
+  % #1: math style
+  % #2: unused
+  \sbox0{$#1\vcenter{}$}% math axis
+  \sbox2{$#1\cdot\m@th$}%
+  \hbox to \bigcdot@widthfactor\wd2{%
+    \hfil
+    \raise\ht0\hbox{%
+      \scalebox{\bigcdot@scalefactor}{%
+        \lower\ht0\hbox{$#1\bullet\m@th$}%
+      }%
+    }%
+    \hfil
+  }%
+}
+\makeatother
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\LOGO}
+  {%
+    \includegraphics[scale=0.4]{udayton-logo-horizontal-2color.pdf}
+  }
+%%
+\backgroundsetup{
+   scale=1,
+   angle=0,
+   opacity=1,
+   color=black,
+   contents={\begin{tikzpicture}[remember picture, overlay]
+      \node at ([xshift=6.8cm,yshift=-1.95cm] current page.north west)
+            {\LOGO}; %
+     \end{tikzpicture}}
+ }
+\newcommand{\DEPARTMENT}
+  {%
+      %{\color{FlyersBlue}{\small\bfseries{Department of Computer Science}}}%
+  }
+%%
+\NewDocumentCommand{\HEADRIGHTPLAIN}{O{Nicholas M. Stiffler, Ph.D.} O{Assistant Professor}}
+  {%
+    \hfill\begin{minipage}{.4\textwidth}
+    \scshape%
+    #1\\ 
+    #2\\
+    Department of Computer Science\\
+    University of Dayton\\
+    \end{minipage}
+  }
+%%
+\newcommand{\footerinfo}
+  {
+      {\color{FlyersBlue} ~~$\bigcdot$~~ Department of Mechanical and Aerospace Engineering, 300 College Park, Dayton, OH 45469-0280%
+      % ~~$\bigcdot$~~(937)229-3831~(office)%
+      ~~$\bigcdot$~~\textit{\textbf{www.udayton.edu}}}%
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Since some packages such as titlesec change the pagestyle (typically to plain),
+% use the following to force this to work for fancy and plain at the same time.
+%
+% Ex Usage:
+%   \fancyhead[L]{\fancyplain{value for ‘plain’ page}{value for other pages}}}
+%
+% Deprecated command example:
+%   \chead[xx]{yy} \fancyhead[CE]{xx} \fancyhead[CO]{yy}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Offsets
+\fancyheadoffset[lh,lf]{-8mm}  
+\fancyheadoffset[rh,rf]{11mm}
+%% Headers
+\fancyhead[L]{\fancyplain{}{}}
+\fancyhead[R]{\fancyplain{\DEPARTMENT}{\DEPARTMENT}}
+%% Footers
+\fancyfoot[L]{\fancyplain{\footnotesize\footerinfo}{\footnotesize\footerinfo}}
+\fancyfoot[C]{\fancyplain{}{}}
+
+%% Rules
+\def\footruleskip{0pt}%
+%\def\footruleskip{-0.3\normalbaselineskip}%
+\renewcommand{\headrule}{\hbox to\headwidth{\color{FlyersBlue}\leaders\hrule height \headrulewidth\hfill}}
+\renewcommand{\footrule}{\hbox to\headwidth{\color{FlyersBlue}\leaders\hrule height \footrulewidth\hfill}}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Fix Margins
+%% \newgeometry{top=2.5in, bottom=1.2in, left=1in, right=1in,headheight=2.5in,headsep=20pt}
+%% \afterpage{\aftergroup\restoregeometry}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,95 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{deepoutline}[2022/06/03 DeepOutline Package]
+\RequirePackage{outlines}
+\RequirePackage{xcolor}
+\RequirePackage{enumitem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Increasing the maximum number of enumerate environments?
+% https://tex.stackexchange.com/questions/262721/increasing-the-maximum-number-of-enumerate-environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+\newcommand{\outlinev}{\ol@type}
+\newcommand{\ol@incv}{\begin{\outlinev}}
+\newcommand{\ol@decv}{\end{\outlinev}}
+\newcommand{\ol@tov}{}
+\renewcommand{\ol@commands}[6]{%
+  \renewcommand{\ol@toz}{#1}%
+  \renewcommand{\ol@toi}{#2}%
+  \renewcommand{\ol@toii}{#3}%
+  \renewcommand{\ol@toiii}{#4}%
+  \renewcommand{\ol@toiiii}{#5}%
+  \renewcommand{\ol@tov}{#6}%
+}
+\renewcommand{\ol@exit}{%
+  \ol@commands{}{}{}{}{}{}}
+\renewcommand{\ol@z}{%
+  \ol@commands%
+    {}%
+    {\ol@inci}%
+    {\ol@inci\ol@incii}%
+    {\ol@inci\ol@incii\ol@inciii}%
+    {\ol@inci\ol@incii\ol@inciii\ol@inciiii}%
+    {\ol@inci\ol@incii\ol@inciii\ol@inciiii\ol@incv}}
+\renewcommand{\ol@i}{%
+  \ol@commands%
+    {\ol@deci}%
+    {}%
+    {\ol@incii}%
+    {\ol@incii\ol@inciii}%
+    {\ol@incii\ol@inciii\ol@inciiii}%
+    {\ol@incii\ol@inciii\ol@inciiii\ol@incv}}
+\renewcommand{\ol@ii}{%
+  \ol@commands%
+    {\ol@decii\ol@deci}%
+    {\ol@decii}%
+    {}%
+    {\ol@inciii}%
+    {\ol@inciii\ol@inciiii}%
+    {\ol@inciii\ol@inciiii\ol@incv}}
+\renewcommand{\ol@iii}{%
+  \ol@commands%
+    {\ol@deciii\ol@decii\ol@deci}%
+    {\ol@deciii\ol@decii}%
+    {\ol@deciii}%
+    {}%
+    {\ol@inciiii}%
+    {\ol@inciiii\ol@incv}}
+\renewcommand{\ol@iiii}{%
+  \ol@commands%
+    {\ol@deciiii\ol@deciii\ol@decii\ol@deci}%
+    {\ol@deciiii\ol@deciii\ol@decii}%
+    {\ol@deciiii\ol@deciii}%
+    {\ol@deciiii}%
+    {}%
+    {\ol@incv}}
+\newcommand{\ol@v}{%
+  \ol@commands%
+    {\ol@decv\ol@deciiii\ol@deciii\ol@decii\ol@deci}%
+    {\ol@decv\ol@deciiii\ol@deciii\ol@decii}%
+    {\ol@decv\ol@deciiii\ol@deciii}%
+    {\ol@decv\ol@deciiii}%
+    {\ol@decv}%
+    {}}
+
+\renewenvironment{outline}[1][]{%
+  \ifthenelse{\equal{#1}{}}{}{\renewcommand{\ol@type}{#1}}%
+  \ol@z%
+  \newcommand{\0}{\ol@toz\ol@z}%
+  \newcommand{\1}{\ol@toi\ol@i\item}%
+  \newcommand{\2}{\ol@toii\ol@ii\item}%
+  \newcommand{\3}{\ol@toiii\ol@iii\item}%
+  \newcommand{\4}{\ol@toiiii\ol@iiii\item}%
+  \newcommand{\5}{\ol@tov\ol@v\item}%
+}{%
+  \ol@toz\ol@exit%
+}
+\makeatother
+
+\newlist{deepoutline}{enumerate}{5}
+
+\setlist[deepoutline,1]{label=\Roman*.}
+\setlist[deepoutline,2]{label=\color{blue}\Alph*.}
+\setlist[deepoutline,3]{label=\arabic*.}
+\setlist[deepoutline,4]{label=\color{red}\alph*.}
+\setlist[deepoutline,5]{label=\Roman*.}

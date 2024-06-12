@@ -1,0 +1,63 @@
+\usepackage{listings}                   % source code printer for LATEX
+\usepackage[many,minted]{tcolorbox}     % environment for colored and framed text boxes with a heading line
+\usepackage{xcolor}
+
+% from https://github.com/kevinsawicki/monokai
+\definecolor{monokai-white}{HTML}{F8F8F0}
+\definecolor{monokai-ghost-white}{HTML}{F8F8F2} 
+\definecolor{monokai-light-gray}{HTML}{CCCCCC}
+\definecolor{monokai-gray}{HTML}{888888}
+\definecolor{monokai-brown-gray}{HTML}{49483E}
+\definecolor{monokai-dark-gray}{HTML}{282828}
+\definecolor{monokai-sundried-clay}{HTML}{272822}
+
+\definecolor{monokai-yellow}{HTML}{E6DB74}
+\definecolor{monokai-blue}{HTML}{66D9EF}
+\definecolor{monokai-pink}{HTML}{F92672} 
+\definecolor{monokai-purple}{HTML}{AE81FF}
+\definecolor{monokai-brown}{HTML}{75715e}
+\definecolor{monokai-orange}{HTML}{FD971F}
+\definecolor{monokai-light-orange}{HTML}{FFD569}
+\definecolor{monokai-green}{HTML}{A6E22E}
+\definecolor{monokai-sea-green}{HTML}{529b2f}
+
+\tcbuselibrary{listings, minted, skins, xparse} 
+\tcbset{listing engine=minted}
+%\usemintedstyle{monokai}
+
+\newcommand{\mynewminted}[3]{%
+\newminted[#1]{#2}{#3}%
+\tcbset{myminted/#1/.style={minted language=#2, minted options={#3}}}}
+
+\mynewminted{mycpp}{csharp}{tabsize=2,fontsize=\footnotesize}
+\mynewminted{myjson}{js}{tabsize=2,fontsize=\footnotesize}
+\mynewminted{myxml}{xml}{tabsize=2,fontsize=\footnotesize}
+\mynewminted{mybash}{bash}{tabsize=2, fontsize=\footnotesize}
+\mynewminted{myshell}{shell-session}{tabsize=2,fontsize=\footnotesize}
+\mynewminted{mypython}{python}{tabsize=2, fontsize=\footnotesize}
+\mynewminted{mysql}{sql}{tabsize=2, fontsize=\footnotesize}
+\mynewminted{mycode}{text}{tabsize=2,fontsize=\footnotesize}
+\mynewminted{mydjangotemplate}{htmldjango}{tabsize=2,fontsize=\footnotesize}
+
+\newtcblisting[auto counter,number within=section,
+list inside=mypyg]{listingsbox}[3][]{%
+listing only,title={Listing \thetcbcounter: #3},
+list entry={\protect\numberline{\thetcbcounter}#3},
+enhanced,colframe=red!50!black,drop fuzzy shadow,myminted/#2,#1}
+
+\newtcblisting[auto counter,number within=section,
+list inside=mypyg]{monokaibox}[3][]{%
+listing only,title={Listing \thetcbcounter: #3},
+list entry={\protect\numberline{\thetcbcounter}#3},
+enhanced,colframe=red!50!black,colback=monokai-sundried-clay,
+colupper=monokai-ghost-white,minted style=monokai,drop fuzzy shadow,myminted/#2,#1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Inline boxes
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+\DeclareTotalTCBox{\commandbox}{ s v } {verbatim,colupper=monokai-ghost-white,colback=monokai-sundried-clay,colframe=yellow!75!black} {\IfBooleanT{#1}{\textcolor{monokai-pink}{\ttfamily\bfseries \$ }}% 
+\lstinline[language=command.com,keywordstyle=\color{blue!35!white}\bfseries]^#2^}
+\DeclareTotalTCBox{\venvbox}{ s v } {verbatim,colupper=monokai-ghost-white,colback=monokai-sundried-clay,colframe=yellow!75!black} {\IfBooleanT{#1}{\textcolor{monokai-pink}{\ttfamily\bfseries (my\_env) \$ }}% 
+\lstinline[language=command.com,keywordstyle=\color{blue!35!white}\bfseries]^#2^}    
+\DeclareTotalTCBox{\pythonbox}{ s v } {verbatim,colupper=monokai-ghost-white,colback=monokai-sundried-clay,colframe=yellow!75!black} {\IfBooleanT{#1}{\textcolor{monokai-pink}{\ttfamily\bfseries >{}>{}>{} }}% 
+\lstinline[language=python,keywordstyle=\color{blue!35!white}\bfseries]^#2^}    
